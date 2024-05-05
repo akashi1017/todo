@@ -24,9 +24,7 @@ export class LoginComponent {
       .subscribe(
         response => {
           this.loginStatus = 'Login successful!';
-          // Show alert
           window.alert('Login successful! Redirecting to task list.');
-          // Redirect to task list after successful login
           this.router.navigate(['/tasks']);
         },
         error => {

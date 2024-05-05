@@ -15,25 +15,33 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // User schema
+// User schema
 const UserSchema = new mongoose.Schema({
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-  }, { collection: 'users' });
-
-const User = mongoose.model('User', UserSchema, 'users');
+  name: { type: String, required: true },
+  username: { type: String, required: true, unique: true },
+  email: { type: String, required: true, unique: true },
+  dob: { type: Date, required: true },
+  password: { type: String, required: true },
+}, { collection: 'users' });
 
 // Register endpoint
 app.post('/register', async (req, res) => {
-    const { username, password } = req.body;
-    try {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const user = new User({ username, password: hashedPassword });
-      await user.save();
-      res.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
-      res.status(500).json({ error: 'Could not register user' });
+  const { name, username, email, dob, password } = req.body;
+  try {
+    // Check if username or email already exists
+    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Username or email already exists' });
     }
-  });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({ name, username, email, dob, password: hashedPassword });
+    await user.save();
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Could not register user' });
+  }
+});
+
   
 // Login endpoint
 app.post('/login', async (req, res) => {
