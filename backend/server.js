@@ -20,13 +20,13 @@ const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
-  dob: { type: Date, required: true },
   password: { type: String, required: true },
 }, { collection: 'users' });
 
+const User = mongoose.model('User', UserSchema, 'users');
 // Register endpoint
 app.post('/register', async (req, res) => {
-  const { name, username, email, dob, password } = req.body;
+  const { name, username, email, password } = req.body;
   try {
     // Check if username or email already exists
     const existingUser = await User.findOne({ $or: [{ username }, { email }] });
@@ -34,11 +34,11 @@ app.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'Username or email already exists' });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ name, username, email, dob, password: hashedPassword });
+    const user = new User({ name, username, email, password: hashedPassword });
     await user.save();
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'Could not register user' });
+    res.status(500).json({ error: "this is error" + error});
   }
 });
 

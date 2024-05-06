@@ -29,7 +29,7 @@ export class RegistrationComponent {
       dobString = this.dob.toISOString().split('T')[0]; // Convert dob to string format
     }
 
-    this.authService.register(this.name, this.username, this.email, dobString, this.password)
+    this.authService.register(this.name, this.username, this.email,  this.password)
       .subscribe(
         response => {
           if (response.message === 'User registered successfully') {
