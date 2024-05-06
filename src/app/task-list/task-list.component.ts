@@ -1,11 +1,12 @@
 import { DatePipe, NgClass, NgFor, NgIf, NgStyle } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NavbarrComponent } from '../navbarr/navbarr.component';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [FormsModule,NgClass,NgIf,NgFor,NgStyle,DatePipe],
+  imports: [FormsModule,NgClass,NgIf,NgFor,NgStyle,DatePipe,NavbarrComponent],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css'
 })
